@@ -1,8 +1,15 @@
 <h1> No Fun League </h1>
 <% if @records.has_key?(@team_name) %>  
-  <h2><%= @team_name  %></h2>
+  <h2><%= "#{@team_name}: #{@records[@team_name][:wins]} - #{@records[@team_name][:losses]}" %></h2>
 <% else %>
   <% redirect "/" %>
 <% end %>
 
-
+<h3> Games Played </h3>
+<ul>
+<% @games_played.each do |game| %>
+  <% if game[:home_team] == @team_name || game[:away_team] == @team_name %>
+  <li><%= "#{game[:home_team]}: #{game[:home_score]} - #{game[:away_team]}: #{game[:away_score]}" %></li>
+  <% end %>
+<% end %>
+</ul>
