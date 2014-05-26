@@ -1,3 +1,12 @@
 <h1> No Fun League </h1>
 <h2> Standings </h2>
 
+<ul>
+  <% @records.each do |team_name, stats| %>
+    <li><a href="/teams/<%= team_name %>">
+    <%= "#{team_name}:  "%> </a>  
+    <%= "#{stats[:wins]} - #{stats[:losses]}" %>
+    </li>
+  <% end %>
+</ul>
+

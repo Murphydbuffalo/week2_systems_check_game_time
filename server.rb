@@ -1,5 +1,5 @@
 require "CSV"
-# require "sinatra"
+require "sinatra"
 # require "pry"
 
 def get_games_csv
@@ -12,10 +12,10 @@ end
 # [ {home_team: Pats, away_team: Broncos, home_score: 7, away_score: 3}, ]
 
 def list_teams(games_played)
-  teams = Hash.new(0)
+  teams = Hash.new
   games_played.each do |game| 
-    teams[game[:home_team]] = {wins: 0, losses: 0, ties: 0} 
-    teams[game[:away_team]] = {wins: 0, losses: 0, ties: 0} 
+    teams[game[:home_team]] ||= {wins: 0, losses: 0, ties: 0} 
+    teams[game[:away_team]] ||= {wins: 0, losses: 0, ties: 0} 
   end
   teams
 end
@@ -33,25 +33,29 @@ def tally_wins(games_played, teams)
       teams[game[:away_team]][:ties] += 1
     end
   end
-    teams = teams.sort_by {|names, vals| [-vals[:wins], vals[:losses]] }
+    teams = teams.sort_by {|names, vals| -vals[:wins] && vals[:losses] }
+    teams_hash = {}
+    teams.each {|arr| teams_hash[arr[0]] = arr[1] }
+    teams_hash #extract this into a method
 end
 
-p tally_wins(get_games_csv, list_teams(get_games_csv))
+get "/leaderboard" do
+  @records = tally_wins(get_games_csv, list_teams(get_games_csv))
+  erb :index
+end
 
-# gets "/leaderboard" do
-  
-#   erb :index
-# end
+get "/" do
+  redirect "/leaderboard"
+end
 
-# gets "/" do
-#   redirect "/leaderboard"
-# end
+get "/teams" do
+  redirect "/leaderboard"
+end
 
-# gets "/teams" do
-#   redirect "/leaderboard"
-# end
-
-# gets "/teams/:team_name" do
-#   redirect "/leaderboard"
-# end
+get "/teams/:team_name" do
+  @team_name = params[:team_name]
+  @games_played = get_games_csv
+  @records = tally_wins(get_games_csv, list_teams(get_games_csv))
+  erb :show
+end
 

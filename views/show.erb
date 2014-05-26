@@ -1,0 +1,8 @@
+<h1> No Fun League </h1>
+<% if @records.has_key?(@team_name) %>  
+  <h2><%= @team_name  %></h2>
+<% else %>
+  <% redirect "/" %>
+<% end %>
+
+
