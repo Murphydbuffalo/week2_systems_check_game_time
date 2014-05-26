@@ -1,0 +1,16 @@
+body {background-image: url("http://photo.elsoar.com/wp-content/images/Thirty-Yard-Line-on-American-Football-Field.jpg") ;
+      font: bold 1.5em Verdana, sans-serif;
+      text-align: center;}
+
+h1 {padding-top: 1em;}
+
+a,
+a:visited {font-style: italic;
+   color: black;}
+
+a:hover {font-size: 1.2em;}
+
+ul li {padding: .5em 0 .5em 0;
+       list-style-type: none;}
+
+
