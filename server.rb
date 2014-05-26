@@ -1,6 +1,5 @@
 require "CSV"
 require "sinatra"
-# require "pry"
 
 def get_games_csv
   games = []
@@ -9,7 +8,6 @@ def get_games_csv
   end
   games
 end
-# [ {home_team: Pats, away_team: Broncos, home_score: 7, away_score: 3}, ]
 
 def list_teams(games_played)
   teams = Hash.new
@@ -18,6 +16,13 @@ def list_teams(games_played)
     teams[game[:away_team]] ||= {wins: 0, losses: 0, ties: 0} 
   end
   teams
+end
+
+def sort_by_wins_losses(teams)
+  teams = teams.sort_by {|names, vals| -vals[:wins] && vals[:losses] }
+  teams_hash = {}
+  teams.each {|arr| teams_hash[arr[0]] = arr[1] }
+  teams_hash 
 end
 
 def tally_wins(games_played, teams)
@@ -32,11 +37,8 @@ def tally_wins(games_played, teams)
       teams[game[:home_team]][:ties] += 1
       teams[game[:away_team]][:ties] += 1
     end
-  end
-    teams = teams.sort_by {|names, vals| -vals[:wins] && vals[:losses] }
-    teams_hash = {}
-    teams.each {|arr| teams_hash[arr[0]] = arr[1] }
-    teams_hash #extract this into a method
+  end 
+  sort_by_wins_losses(teams)  
 end
 
 get "/leaderboard" do
