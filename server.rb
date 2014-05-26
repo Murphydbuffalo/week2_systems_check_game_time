@@ -33,7 +33,7 @@ def tally_wins(games_played, teams)
       teams[game[:away_team]][:ties] += 1
     end
   end
-  teams
+    teams = teams.sort_by {|names, vals| [-vals[:wins], vals[:losses]] }
 end
 
 p tally_wins(get_games_csv, list_teams(get_games_csv))
